@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuItem } from "../MenuItem";
+import MenuItem from "../MenuItem";
 import "./Directory.scss";
 
 export function Directory() {
@@ -41,10 +41,8 @@ export function Directory() {
 
   return (
     <div className="directory-menu">
-      {state.sections.map(({ id, title, size, imageUrl }) => {
-        return (
-          <MenuItem key={id} title={title} imageUrl={imageUrl} size={size} />
-        );
+      {state.sections.map(({ id, ...rest }) => {
+        return <MenuItem key={id} {...rest} />;
       })}
     </div>
   );
