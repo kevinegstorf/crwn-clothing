@@ -3,7 +3,8 @@ import "./App.css";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
-import { Header } from "./components";
+import ContactPage from "./pages/ContactPage";
+import MainLayout from "./layout/MainLayout";
 import SignInAndSignUpPage from "./pages/SignInAndSignUpPage";
 import FirebaseAppContextProvider from "./context/FirebaseContext";
 
@@ -32,16 +33,50 @@ function App() {
     <div>
       <FirebaseAppContextProvider config={firebaseConfig}>
         <BrowserRouter>
-          <Header />
           <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/shop" component={ShopPage} />
-            <Route exact path="/sign_in" component={SignInAndSignUpPage} />
+            <Route exact path="/" component={HomePageWrapper} />
+            <Route exact path="/shop" component={ShopPageWrapper} />
+            <Route exact path="/contact" component={ContactPageWrapper} />
+            <Route
+              exact
+              path="/sign_in"
+              component={SignInAndSignUpPageWrapper}
+            />
           </Switch>
         </BrowserRouter>
       </FirebaseAppContextProvider>
     </div>
   );
 }
+
+const HomePageWrapper = () => {
+  return (
+    <MainLayout>
+      <HomePage />
+    </MainLayout>
+  );
+};
+const SignInAndSignUpPageWrapper = () => {
+  return (
+    <MainLayout>
+      <SignInAndSignUpPage />
+    </MainLayout>
+  );
+};
+
+const ShopPageWrapper = () => {
+  return (
+    <MainLayout>
+      <ShopPage />
+    </MainLayout>
+  );
+};
+const ContactPageWrapper = () => {
+  return (
+    <MainLayout>
+      <ContactPage />
+    </MainLayout>
+  );
+};
 
 export default App;

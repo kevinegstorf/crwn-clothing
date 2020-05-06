@@ -1,7 +1,10 @@
 import React from "react";
 import "./SignIn.scss";
 import { FormInput, Button } from "../../components";
-import { FirebaseAppContext } from "../../context/FirebaseContext";
+import {
+  FirebaseAppContext,
+  createUserProfileDocument,
+} from "../../context/FirebaseContext";
 import { useHistory } from "react-router-dom";
 
 function SignIn() {
@@ -14,16 +17,19 @@ function SignIn() {
     console.log(state);
   };
 
-  const login = () => {
-    console.log(
-      firebase
-        .auth()
-        .signInWithPopup(provider)
-        .then((user) => {
-          console.log({ user });
-          history.push("/userpage");
-        })
-    );
+  const login = (e) => {
+    e.preventDefault();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(async (user) => {
+        createUserProfileDocument(user, {
+          city: "Amsterdam",
+          zipcode: "1000AA",
+        });
+        history.push("/");
+        console.log({ user });
+      });
   };
 
   return (
@@ -45,8 +51,12 @@ function SignIn() {
           handleChange={(e) => setState({ ...state, password: e.target.value })}
           label="Password"
         />
-        <Button type="submit">Sign In</Button>
-        <Button onClick={login}>Google Sign IN</Button>
+        <div className="buttons">
+          <Button type="submit">SIGN IN</Button>
+          <Button onClick={login} isGoogleSignIn>
+            SIGN IN WITH GOOGLE
+          </Button>
+        </div>
       </form>
     </div>
   );

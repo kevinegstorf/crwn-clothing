@@ -33,4 +33,25 @@ const FirebaseAppContextProvider = ({ children, config }) => {
   );
 };
 
+export const createUserProfileDocument = async (userAuth, data) => {
+  const firestore = firebase.firestore();
+  if (!userAuth) return;
+  const userRef = firestore.collection("users").doc(userAuth.user.uid);
+  console.log(userAuth.user);
+  try {
+    const snapShot = await userRef.get();
+    if (!snapShot.exists) {
+      await userRef.set({
+        name: userAuth.user.displayName,
+        email: userAuth.user.email,
+        creationTime: userAuth.user.metadata.creationTime,
+        ...data,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return userRef;
+};
+
 export default FirebaseAppContextProvider;
